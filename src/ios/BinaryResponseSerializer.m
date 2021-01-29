@@ -1,4 +1,5 @@
 #import "BinaryResponseSerializer.h"
+#import "AFNetworking+CordovaHttpPlugin.h"
 
 static NSError * AFErrorWithUnderlyingError(NSError *error, NSError *underlyingError) {
   if (!error) {

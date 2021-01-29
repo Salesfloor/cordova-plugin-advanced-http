@@ -1,11 +1,12 @@
+#import <AFNetworking/AFHTTPSessionManager.h>
 #import "CordovaHttpPlugin.h"
 #import "CDVFile.h"
 #import "BinaryRequestSerializer.h"
 #import "BinaryResponseSerializer.h"
 #import "TextResponseSerializer.h"
 #import "TextRequestSerializer.h"
-#import <AFNetworking/AFHTTPSessionManager.h>
 #import "SDNetworkActivityIndicator.h"
+#import "AFNetworking+CordovaHttpPlugin.h"
 
 @interface CordovaHttpPlugin()
 

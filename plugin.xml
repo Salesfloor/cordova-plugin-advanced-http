@@ -31,12 +31,14 @@
       </feature>
     </config-file>
     <header-file src="src/ios/CordovaHttpPlugin.h"/>
+    <header-file src="src/ios/AFNetworking+CordovaHttpPlugin.h"/>
     <header-file src="src/ios/BinaryRequestSerializer.h"/>
     <header-file src="src/ios/BinaryResponseSerializer.h"/>
     <header-file src="src/ios/TextResponseSerializer.h"/>
     <header-file src="src/ios/TextRequestSerializer.h"/>
     <header-file src="src/ios/SDNetworkActivityIndicator/SDNetworkActivityIndicator.h"/>
     <source-file src="src/ios/CordovaHttpPlugin.m"/>
+    <source-file src="src/ios/AFNetworking+CordovaHttpPlugin.m"/>
     <source-file src="src/ios/BinaryRequestSerializer.m"/>
     <source-file src="src/ios/BinaryResponseSerializer.m"/>
     <source-file src="src/ios/TextResponseSerializer.m"/>
