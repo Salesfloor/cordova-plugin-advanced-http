@@ -4,7 +4,7 @@
 #import "BinaryResponseSerializer.h"
 #import "TextResponseSerializer.h"
 #import "TextRequestSerializer.h"
-#import "AFHTTPSessionManager.h"
+#import <AFNetworking/AFHTTPSessionManager.h>
 #import "SDNetworkActivityIndicator.h"
 
 @interface CordovaHttpPlugin()

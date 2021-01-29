@@ -96,7 +96,6 @@ static BOOL AFErrorOrUnderlyingErrorHasCodeInDomain(NSError *error, NSInteger co
         NSURLErrorFailingURLErrorKey:[response URL],
         AFNetworkingOperationFailingURLResponseErrorKey: response,
         AFNetworkingOperationFailingURLResponseDataErrorKey: data,
-        AFNetworkingOperationFailingURLResponseBodyErrorKey: @"Could not decode response data due to invalid or unknown charset encoding",
       } mutableCopy];
 
       validationError = AFErrorWithUnderlyingError([NSError errorWithDomain:AFURLResponseSerializationErrorDomain code:NSURLErrorBadServerResponse userInfo:mutableUserInfo], validationError);
@@ -110,7 +109,6 @@ static BOOL AFErrorOrUnderlyingErrorHasCodeInDomain(NSError *error, NSInteger co
 
       if (data) {
         mutableUserInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] = data;
-        mutableUserInfo[AFNetworkingOperationFailingURLResponseBodyErrorKey] = *decoded;
       }
 
       validationError = AFErrorWithUnderlyingError([NSError errorWithDomain:AFURLResponseSerializationErrorDomain code:NSURLErrorBadServerResponse userInfo:mutableUserInfo], validationError);
