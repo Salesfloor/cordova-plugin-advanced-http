@@ -48,10 +48,10 @@
     <framework src="SystemConfiguration.framework"/>
     <podspec>
       <config>
-        <source url="https://github.com/CocoaPods/Specs.git"/>
+        <source url="https://github.com/ElfSundae/CocoaPods-Specs.git"/>
       </config>
       <pods use-frameworks="true">
-        <pod name="AFNetworking" spec="~> 3.0" options=":source => 'https://github.com/ElfSundae/CocoaPods-Specs.git'"/>
+        <pod name="AFNetworking" spec="~> 3.2.1"/>
       </pods>
     </podspec>
   </platform>
