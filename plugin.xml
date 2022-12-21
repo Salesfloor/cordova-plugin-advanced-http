@@ -51,7 +51,7 @@
         <source url="https://github.com/CocoaPods/Specs.git"/>
       </config>
       <pods use-frameworks="true">
-        <pod name="AFNetworking" spec="~> 4.0.1"/>
+        <pod name="AFNetworking" spec="~> 3.2.1" options=":subspecs => ['Reachability', 'Serialization', 'Security', 'NSURLSession']"/>
       </pods>
     </podspec>
   </platform>
