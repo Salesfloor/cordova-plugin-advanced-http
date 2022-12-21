@@ -51,7 +51,7 @@
         <source url="https://github.com/ElfSundae/CocoaPods-Specs.git"/>
       </config>
       <pods use-frameworks="true">
-        <pod name="AFNetworking" spec="~> 3.2.1"/>
+        <pod name="AFNetworking" spec="~> 3.0"/>
       </pods>
     </podspec>
   </platform>
