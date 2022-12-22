@@ -460,7 +460,7 @@
     [[SDNetworkActivityIndicator sharedActivityIndicator] startActivity];
 
     @try {
-        NSURLSessionDataTask *task = [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSURLSessionDataTask *task = [manager POST:url parameters:nil headers:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             NSError *error;
             for (int i = 0; i < [filePaths count]; i++) {
                 NSString *filePath = (NSString *) [filePaths objectAtIndex:i];
@@ -530,7 +530,7 @@
     [[SDNetworkActivityIndicator sharedActivityIndicator] startActivity];
 
     @try {
-        NSURLSessionDataTask *task = [manager GET:url parameters:nil progress: nil success:^(NSURLSessionTask *task, id responseObject) {
+        NSURLSessionDataTask *task = [manager GET:url parameters:nil headers:nil progress: nil success:^(NSURLSessionTask *task, id responseObject) {
             [weakSelf removeRequest:reqId];
             /*
              *
