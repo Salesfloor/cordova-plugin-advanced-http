@@ -201,7 +201,6 @@
     NSTimeInterval timeoutInSeconds = [[command.arguments objectAtIndex:2] doubleValue];
     bool followRedirect = [[command.arguments objectAtIndex:3] boolValue];
     NSString *responseType = [command.arguments objectAtIndex:4];
-    NSNumber *reqId = [command.arguments objectAtIndex:5];
 
     [self setRequestSerializer: @"default" forManager: manager];
     [self setupAuthChallengeBlock: manager];
@@ -215,8 +214,6 @@
 
     @try {
         void (^onSuccess)(NSURLSessionTask *, id) = ^(NSURLSessionTask *task, id responseObject) {
-            [weakSelf removeRequest:reqId];
-
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
 
             // no 'body' for HEAD request, omitting 'data'
@@ -232,8 +229,6 @@
         };
 
         void (^onFailure)(NSURLSessionTask *, NSError *) = ^(NSURLSessionTask *task, NSError *error) {
-            [weakSelf removeRequest:reqId];
-
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
             [self handleError:dictionary withResponse:(NSHTTPURLResponse*)task.response error:error];
 
@@ -241,9 +236,8 @@
             [weakSelf.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
             [[SDNetworkActivityIndicator sharedActivityIndicator] stopActivity];
         };
-
-        NSURLSessionDataTask *task = [manager downloadTaskWithHTTPMethod:method URLString:url parameters:nil progress:nil success:onSuccess failure:onFailure];
-        [self addRequest:reqId forTask:task];
+        NSURLSessionDataTask *task = [manager dataTaskWithHTTPMethod:method URLString:url parameters:nil headers:headers uploadProgress:nil downloadProgress:nil success:onSuccess failure:onFailure];
+        [task resume];
     }
     @catch (NSException *exception) {
         [[SDNetworkActivityIndicator sharedActivityIndicator] stopActivity];
@@ -261,7 +255,6 @@
     NSTimeInterval timeoutInSeconds = [[command.arguments objectAtIndex:4] doubleValue];
     bool followRedirect = [[command.arguments objectAtIndex:5] boolValue];
     NSString *responseType = [command.arguments objectAtIndex:6];
-    NSNumber *reqId = [command.arguments objectAtIndex:7];
 
     [self setRequestSerializer: serializerName forManager: manager];
     [self setupAuthChallengeBlock: manager];
@@ -296,8 +289,6 @@
             }
 
             if (error) {
-                [weakSelf removeRequest:reqId];
-
                 NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
                 [dictionary setObject:[NSNumber numberWithInt:400] forKey:@"status"];
                 [dictionary setObject:@"Could not add part to multipart request body." forKey:@"error"];
@@ -309,8 +300,6 @@
         };
 
         void (^onSuccess)(NSURLSessionTask *, id) = ^(NSURLSessionTask *task, id responseObject) {
-            [weakSelf removeRequest:reqId];
-
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
             [self handleSuccess:dictionary withResponse:(NSHTTPURLResponse*)task.response andData:responseObject];
 
@@ -320,8 +309,6 @@
         };
 
         void (^onFailure)(NSURLSessionTask *, NSError *) = ^(NSURLSessionTask *task, NSError *error) {
-            [weakSelf removeRequest:reqId];
-
             NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
             [self handleError:dictionary withResponse:(NSHTTPURLResponse*)task.response error:error];
 
@@ -330,13 +317,13 @@
             [[SDNetworkActivityIndicator sharedActivityIndicator] stopActivity];
         };
 
-        NSURLSessionDataTask *task;
+        NSURLSessionDataTask *task = nil;
         if ([serializerName isEqualToString:@"multipart"]) {
-            task = [manager uploadTaskWithHTTPMethod:method URLString:url parameters:nil constructingBodyWithBlock:constructBody progress:nil success:onSuccess failure:onFailure];
+            task = [manager POST:url parameters:nil headers:headers constructingBodyWithBlock:constructBody progress:nil success:onSuccess failure:onFailure];
         } else {
-            task = [manager uploadTaskWithHTTPMethod:method URLString:url parameters:data progress:nil success:onSuccess failure:onFailure];
+            task = [manager dataTaskWithHTTPMethod:method URLString:url parameters:data headers:headers uploadProgress:nil downloadProgress:nil success:onSuccess failure:onFailure];
+            [task resume];
         }
-        [self addRequest:reqId forTask:task];
     }
     @catch (NSException *exception) {
         [[SDNetworkActivityIndicator sharedActivityIndicator] stopActivity];
@@ -460,7 +447,7 @@
     [[SDNetworkActivityIndicator sharedActivityIndicator] startActivity];
 
     @try {
-        NSURLSessionDataTask *task = [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        NSURLSessionDataTask *task = [manager POST:url parameters:nil headers:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
             NSError *error;
             for (int i = 0; i < [filePaths count]; i++) {
                 NSString *filePath = (NSString *) [filePaths objectAtIndex:i];
@@ -530,7 +517,7 @@
     [[SDNetworkActivityIndicator sharedActivityIndicator] startActivity];
 
     @try {
-        NSURLSessionDataTask *task = [manager GET:url parameters:nil progress: nil success:^(NSURLSessionTask *task, id responseObject) {
+        NSURLSessionDataTask *task = [manager GET:url parameters:nil headers:nil progress: nil success:^(NSURLSessionTask *task, id responseObject) {
             [weakSelf removeRequest:reqId];
             /*
              *
