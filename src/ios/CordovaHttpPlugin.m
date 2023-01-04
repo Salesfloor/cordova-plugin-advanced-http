@@ -242,7 +242,7 @@
             [[SDNetworkActivityIndicator sharedActivityIndicator] stopActivity];
         };
 
-        NSURLSessionDataTask *task = [manager downloadTaskWithHTTPMethod:method URLString:url parameters:nil progress:nil success:onSuccess failure:onFailure];
+        NSURLSessionDataTask *task = [manager dataTaskWithHTTPMethod:method URLString:url parameters:nil headers:headers uploadProgress:nil downloadProgress:nil success:onSuccess failure:onFailure];
         [self addRequest:reqId forTask:task];
     }
     @catch (NSException *exception) {
@@ -332,9 +332,9 @@
 
         NSURLSessionDataTask *task;
         if ([serializerName isEqualToString:@"multipart"]) {
-            task = [manager uploadTaskWithHTTPMethod:method URLString:url parameters:nil constructingBodyWithBlock:constructBody progress:nil success:onSuccess failure:onFailure];
+            task = [manager POST:url parameters:nil headers:headers constructingBodyWithBlock:constructBody progress:nil success:onSuccess failure:onFailure];
         } else {
-            task = [manager uploadTaskWithHTTPMethod:method URLString:url parameters:data progress:nil success:onSuccess failure:onFailure];
+            task = [manager dataTaskWithHTTPMethod:method URLString:url parameters:data headers:headers uploadProgress:nil downloadProgress:nil success:onSuccess failure:onFailure];
         }
         [self addRequest:reqId forTask:task];
     }
